@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="title">
+        <h3 id="title">Patient Registration</h3>
+    </div>
+    <form #patientForm="ngForm" ngNativeValidate>
+        <div class="row top-buffer">
+            <div class="col-3">
+                <label class="control-label">Name:</label>
+            </div>
+            <div class="col-3">
+                <input type="text" name="name" [(ngModel)]="patientDetail.name" class="form-control"
+                    (keypress)="onKeyPress($event)" required>
+            </div>
+            <div class="col-3">
+                <label class="control-label">Surname:</label>
+            </div>
+            <div class="col-3">
+                <input type="text" name="surName" [(ngModel)]="patientDetail.surName" class="form-control"
+                    (keypress)="onKeyPress($event)" required>
+            </div>
+        </div>
+        <div class="row top-buffer">
+
+        </div>
+        <div class="row top-buffer">
+            <div class="col-3">
+                <label class="control-label">Birth Date:</label>
+            </div>
+            <div class="col-3">
+                <input type="date" [(ngModel)]="patientDetail.dob" name="dob" class="form-control" [max]="maxDate"
+                    [min]="minDate" onkeydown="return false" required>
+            </div>
+            <div class="col-3">
+                <label class="control-label">Gender:</label>
+            </div>
+            <div class="col-3">
+                <select class="form-control" [(ngModel)]="patientDetail.gender" name="gender" required>
+                    <option [value]="-1" class="hide">Select</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-3">
+                <label class="control-label">State:</label>
+            </div>
+            <div class="col-3">
+                <select class="form-control" [(ngModel)]="patientDetail.stateId"
+                    (change)="getCityData($event.target.value)" name='stateId' [value]='-1' required>
+                    <option [value]="-1">Select State</option>
+                    <option *ngFor="let state of stateData" [value]="state.id">{{state.name}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label class="control-label">City:</label>
+            </div>
+            <div class="col-3">
+                <select class="form-control" [(ngModel)]="patientDetail.cityId" name="cityId" [value]='-1' required>
+                    <option [value]="-1">Select City</option>
+                    <option *ngFor="let city of cityData" [value]="city.id">{{city.name}}</option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+    <div class="row top-buffer">
+        <div class="col-9 ">
+            <button class="btn btn-primary float-left" (click)="getPatientData()">Fetch</button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-secondary float-right"
+                [disabled]="patientForm.form.invalid ||patientDetail.cityId==-1||patientDetail.stateId==-1||patientDetail.gender=='-1' "
+                (click)="registerPatient()">Save</button>
+        </div>
+    </div>
+    <div class="row top-buffer">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                </tr>
+                <tr *ngFor="let patient of patientData">
+                    <td>{{patient.name}}</td>
+                    <td>{{patient.surName}}</td>
+                    <td>{{patient.dob | date : 'dd-MM-yyyy'}}</td>
+                    <td>{{patient.gender}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
